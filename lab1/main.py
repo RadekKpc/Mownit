@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import float32,power,float64
 import matplotlib.pyplot as pyplot
+import time
 
 v = float32(0.53125)
 numbers = [v]*10**7
@@ -11,22 +12,27 @@ def blad_wzgledny(number,result):
 def blad_bezwzgledny(number,result):
     return (number - result)
 
+# zad 1.1, 1.4
 def tradycyjne_sumowanie(numbers):
     result = float32(0.0)
     blad_talbe = []
 
+    start = time.time()
     c = 0
     for i in numbers:
         result = result + i
         if c%25000 == 0:
             blad_talbe.append(blad_wzgledny(v*(c + 1),result))
         c += 1
-
+    end = time.time()
+    tradycyjne_time =end - start
+    print("Czas tradycyjnego",tradycyjne_time)
     pyplot.plot(blad_talbe)
     pyplot.show()
 
     return result
 
+# zad 1.4
 def tree_sum(numbers):
     if len(numbers) == 0:
         return float32(0.0)
@@ -37,7 +43,7 @@ def tree_sum(numbers):
 
     return tree_sum(numbers[ :int(len(numbers)/2 )]) + tree_sum(numbers[ int(len(numbers)/2): ])
 
-#zad 2
+# zad 2
 def kahan(numbers):
     suma = float32(0.0)
     err = float32(0.0)
@@ -50,33 +56,50 @@ def kahan(numbers):
 
     return suma
 
-
-
-
+# zad 1.2
+print("TRADYCYJNE SUMOWANIE")
 first = tradycyjne_sumowanie(numbers)
 
-print(blad_wzgledny(5312500,first))
-print(blad_bezwzgledny(5312500,first))
-
+print("Blad wzgledny",blad_wzgledny(5312500,first))
+print("Blad bezwzgledny",blad_bezwzgledny(5312500,first))
+print()
+# zad 1.5
+print("TREE SUM")
+start = time.time()
 tree_numbers_sum = tree_sum(numbers)
+end = time.time()
+tree_time = end - start
 
-print(blad_bezwzgledny(5312500,tree_numbers_sum))
-print(blad_wzgledny(5312500,tree_numbers_sum))
+print("Blad wzgledny",blad_wzgledny(5312500,tree_numbers_sum))
+print("Blad bezwzgledny",blad_bezwzgledny(5312500,tree_numbers_sum))
+print("Czas tree sum",tree_time)
+print()
 
+# zad 2.1
+print("KAHAN SUM")
+start = time.time()
 kahan_sum = kahan(numbers)
+end = time.time()
+kahan_time = end - start
 
-print(blad_bezwzgledny(5312500,kahan_sum))
-print(blad_wzgledny(5312500,kahan_sum))
+print("Blad wzgledny",blad_wzgledny(5312500,kahan_sum))
+print("Blad bezwzgledny",blad_bezwzgledny(5312500,kahan_sum))
+print("Czas Kahana", kahan_time)
+print()
+# zad 1.6
+# tree_sum dziala woniej gdyż jest to algorytm oc zasie O(n*log(n))
+# podczas gdy tradycyjne sumowanie to O(n)
 
+# zad 2.2
 #Ponieważ eliminuje błąd utraty low-order bitów,
-#za kazdym razem jest wyliczany errr czyli bity ktore zostaly utracone w sumowaniu duzej liczby i malej
+#za kazdym razem jest wyliczany err czyli bity ktore zostaly utracone w sumowaniu duzej liczby i malej
 #bity te są dodawane w nastepnym obiegu petli do kolejenj liczby
 
+# zad 2.3
 #Sumowanie rekurencyjne zajumje wiecej czasu gdyn ma zlozonosc O(n*log(n))
 #podczas gdy algorytm Kahana ma czas liniowy
 
-#zad3
-
+# zad 3
 def dzeta(s,n,reverse,doublePrecision):
 
     if reverse:
@@ -180,8 +203,7 @@ for i in range(0,5):
 # ak widac float64 jest dokladniejszy od float32,
 # ktrego wynik siega 10^-7, float64 siega do 10^-16
 
-# ZAD4
-
+# zad 4
 def odwzorowanie(x0,r,n,doublePrecision):
 
     for i in range(0,n):
@@ -258,6 +280,8 @@ delta = 1e-5
 n_max = 1000000
 x0 = float32(0.0)
 
+print("ZAD 4C\n")
+
 while x0 <= float32(1.0):
     k = x0
     l = 0
@@ -267,7 +291,3 @@ while x0 <= float32(1.0):
         l = l + 1
     print("X0=",x0,"liczba iteracji:",l)
     x0 = x0 + float32(0.05)
-
-
-
-
