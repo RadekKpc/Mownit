@@ -160,6 +160,7 @@ nfloat64 = [float64(50.0),float64(100.0),float64(200.0),float64(500.0),float64(1
 print("ZAD3 DZETA")
 for i in range(0,5):
     for j in range(0,5):
+        print()
         print("Pojedyncza precyzja s=",sfloat32[i],"n=",nfloat32[j]," : ",dzeta(sfloat32[i],nfloat32[j],False,False))
         print("Pojedyncza precyzja revers s=",sfloat32[i],"n=",nfloat32[j]," : ",dzeta(sfloat32[i],nfloat32[j],True,False))
         print("Podwujna precyzja s=",sfloat64[i],"n=",nfloat64[j]," : ",dzeta(sfloat64[i],nfloat64[j],False,True))
@@ -168,11 +169,108 @@ for i in range(0,5):
 print("ZAD3 ETA")
 for i in range(0,5):
     for j in range(0,5):
+        print()
         print("Pojedyncza precyzja s=",sfloat32[i],"n=",nfloat32[j]," : ",eta(sfloat32[i],nfloat32[j],False,False))
         print("Pojedyncza precyzja revers s=",sfloat32[i],"n=",nfloat32[j]," : ",eta(sfloat32[i],nfloat32[j],True,False))
         print("Podwujna precyzja s=",sfloat64[i],"n=",nfloat64[j]," : ",eta(sfloat64[i],nfloat64[j],False,True))
         print("Podwujna precyzja revers s=",sfloat64[i],"n=",nfloat64[j]," : ",eta(sfloat64[i],nfloat64[j],False,True))
 
-eta(float32(2.0),float32(50),False,True)
+# Dla sumowania z reversem dostajemy bledne wyniki,
+# bez reversu jest dokladniej,
+# ak widac float64 jest dokladniejszy od float32,
+# ktrego wynik siega 10^-7, float64 siega do 10^-16
+
+# ZAD4
+
+def odwzorowanie(x0,r,n,doublePrecision):
+
+    for i in range(0,n):
+
+        if doublePrecision:
+            result = r*x0*(float64(1.0) - x0)
+        else:
+            result = r*x0*(float32(1.0) - x0)
+
+        x0 = result
+
+    return x0
+
+
+# print(odwzorowanie(float32(0.4),float32(1.0),2,False))
+
+# A
+
+# rfloat32 = [float32(1.0),float32(2.0),float32(3.5),float32(4.0)]
+# rfloat64 = [float64(1.0),float64(2.0),float64(3.5),float64(4.0)]
+
+# x0float32 = [float32(0.1),float32(0.4),float32(0.7),float32(0.9)]
+# x0float64 = [float64(0.1),float64(0.4),float64(0.7),float64(0.9)]
+
+x = []
+y = []
+
+r = float32(1.0)
+while r <= float32(4.0):
+    xzero = float32(0.0)
+    while xzero <= float32(1.0):
+        val = odwzorowanie(xzero,r,100,False)
+        y.append(val)
+        x.append(r)
+        xzero = xzero + float32(0.02)
+    r = r + float32(0.05)
+
+pyplot.plot(x,y,'ro',markersize=2)
+pyplot.axis([1.0, 4.0, 0.0, 1.0])
+pyplot.show()
+
+# B
+
+x = []
+y = []
+
+r = float32(3.75)
+while r <= float32(3.8):
+    xzero = float32(0.0)
+    while xzero <= float32(1.0):
+        val = odwzorowanie(xzero,r,100,False)
+        y.append(val)
+        x.append(r)
+        xzero = xzero + float32(0.02)
+    r = r + float32(0.001)
+
+pyplot.plot(x,y,'ro',markersize=1)
+
+x = []
+y = []
+
+r = float64(3.75)
+while r <= float64(3.8):
+    xzero = float64(0.0)
+    while xzero <= float64(1.0):
+        val = odwzorowanie(xzero,r,100,False)
+        y.append(val)
+        x.append(r)
+        xzero = xzero + float64(0.02)
+    r = r + float64(0.001)
+
+
+pyplot.plot(x,y,'bo',markersize=1)
+pyplot.axis([3.7, 3.9, 0.0, 1.0])
+pyplot.show()
+
+# C
+
+x0float32 = [float32(0.1),float32(0.4),float32(0.7),float32(0.9)]
+r = float32(4.0)
+
+# for x0 in x0float32:
+#     d = float32(1.0)
+#     i = 0
+#     while(d != float32(0.0)):
+#         d = odwzorowanie(x0,r,i,False)
+#         i = i + 1
+#         print(d,i)
+#     print("X0=",x0,"liczba iteracji:",i)
+
 
 
