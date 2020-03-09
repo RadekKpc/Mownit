@@ -53,20 +53,20 @@ def kahan(numbers):
 
 
 
-# first = tradycyjne_sumowanie(numbers)
+first = tradycyjne_sumowanie(numbers)
 
-# print(blad_wzgledny(5312500,first))
-# print(blad_bezwzgledny(5312500,first))
+print(blad_wzgledny(5312500,first))
+print(blad_bezwzgledny(5312500,first))
 
-# tree_numbers_sum = tree_sum(numbers)
+tree_numbers_sum = tree_sum(numbers)
 
-# print(blad_bezwzgledny(5312500,tree_numbers_sum))
-# print(blad_wzgledny(5312500,tree_numbers_sum))
+print(blad_bezwzgledny(5312500,tree_numbers_sum))
+print(blad_wzgledny(5312500,tree_numbers_sum))
 
-# kahan_sum = kahan(numbers)
+kahan_sum = kahan(numbers)
 
-# print(blad_bezwzgledny(5312500,kahan_sum))
-# print(blad_wzgledny(5312500,kahan_sum))
+print(blad_bezwzgledny(5312500,kahan_sum))
+print(blad_wzgledny(5312500,kahan_sum))
 
 #Ponieważ eliminuje błąd utraty low-order bitów,
 #za kazdym razem jest wyliczany errr czyli bity ktore zostaly utracone w sumowaniu duzej liczby i malej
@@ -195,16 +195,7 @@ def odwzorowanie(x0,r,n,doublePrecision):
 
     return x0
 
-
-# print(odwzorowanie(float32(0.4),float32(1.0),2,False))
-
-# A
-
-# rfloat32 = [float32(1.0),float32(2.0),float32(3.5),float32(4.0)]
-# rfloat64 = [float64(1.0),float64(2.0),float64(3.5),float64(4.0)]
-
-# x0float32 = [float32(0.1),float32(0.4),float32(0.7),float32(0.9)]
-# x0float64 = [float64(0.1),float64(0.4),float64(0.7),float64(0.9)]
+# 4.A
 
 x = []
 y = []
@@ -217,13 +208,30 @@ while r <= float32(4.0):
         y.append(val)
         x.append(r)
         xzero = xzero + float32(0.02)
-    r = r + float32(0.05)
+    r = r + float32(0.005)
 
-pyplot.plot(x,y,'ro',markersize=2)
+pyplot.plot(x,y,'ro',markersize=1)
 pyplot.axis([1.0, 4.0, 0.0, 1.0])
 pyplot.show()
 
-# B
+# 4.B
+x = []
+y = []
+
+r = float64(3.75)
+while r <= float64(3.8):
+    xzero = float64(0.0)
+    while xzero <= float64(1.0):
+        val = odwzorowanie(xzero,r,100,True)
+        y.append(val)
+        x.append(r)
+        xzero = xzero + float64(0.02)
+    r = r + float64(0.005)
+
+
+pyplot.plot(x,y,'bo',markersize=1)
+pyplot.axis([3.75, 3.8, 0.0, 1.0])
+pyplot.show()
 
 x = []
 y = []
@@ -236,41 +244,30 @@ while r <= float32(3.8):
         y.append(val)
         x.append(r)
         xzero = xzero + float32(0.02)
-    r = r + float32(0.001)
+    r = r + float32(0.005)
 
 pyplot.plot(x,y,'ro',markersize=1)
 
-x = []
-y = []
-
-r = float64(3.75)
-while r <= float64(3.8):
-    xzero = float64(0.0)
-    while xzero <= float64(1.0):
-        val = odwzorowanie(xzero,r,100,False)
-        y.append(val)
-        x.append(r)
-        xzero = xzero + float64(0.02)
-    r = r + float64(0.001)
-
-
-pyplot.plot(x,y,'bo',markersize=1)
-pyplot.axis([3.7, 3.9, 0.0, 1.0])
+pyplot.axis([3.75, 3.8, 0.0, 1.0])
 pyplot.show()
 
-# C
+# 4.C
 
-x0float32 = [float32(0.1),float32(0.4),float32(0.7),float32(0.9)]
 r = float32(4.0)
+delta = 1e-5
+n_max = 1000000
+x0 = float32(0.0)
 
-# for x0 in x0float32:
-#     d = float32(1.0)
-#     i = 0
-#     while(d != float32(0.0)):
-#         d = odwzorowanie(x0,r,i,False)
-#         i = i + 1
-#         print(d,i)
-#     print("X0=",x0,"liczba iteracji:",i)
+while x0 <= float32(1.0):
+    k = x0
+    l = 0
+    while k > delta and l<n_max:
+        result = r*k*(float32(1.0) - k)
+        k = result
+        l = l + 1
+    print("X0=",x0,"liczba iteracji:",l)
+    x0 = x0 + float32(0.05)
+
 
 
 
