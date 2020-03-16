@@ -2,6 +2,7 @@ import numpy as np
 from numpy import float32,power,float64
 import matplotlib.pyplot as pyplot
 import math
+from scipy.interpolate import interp1d
 #np.linalg.slove()
 #np.vander()
 # wzor lagranrza, metoda newtona do interpolacji
@@ -98,20 +99,41 @@ pyplot.show()
 
 a = 5
 b = 1
-t = 0
+
+def x_func(t):
+    return a*math.cos(t)
+
+def y_func(t):
+    return b*math.sin(t)
+
 x = []
 y = []
+t = 0
 while t <= 2*math.pi:
-    x.append(a*math.cos(t))
-    y.append(b*math.sin(t))
+    x.append(x_func(t))
+    y.append(y_func(t))
     t += 0.01
 
 pyplot.plot(x,y,'bo',markersize=1)
 pyplot.show()
 
-# interpolacja dla 10 t, zalozenia dla pochodnych itp.  dla tego ostatni taki jak dla pierwszego
 
-while t <= 2*math.pi:
+def cube_spline_interpolate_elipse(n):
+    r = np.linspace(0,2*math.pi,n)
+    sx = interp1d(r,list(map(x_func,r)),kind='cubic')
+    sy = interp1d(r,list(map(y_func,r)),kind='cubic')
+    x = []
+    y = []
+    for t in np.linspace(0, 2 * np.pi, 1000):
+        x.append(sx(t))
+        y.append(sy(t))
+    pyplot.plot(x,y,'bo',markersize=1)
+    pyplot.show()
 
-    t += 2*math.pi/10
+cube_spline_interpolate_elipse(10)
+
+cube_spline_interpolate_elipse(30)
+
+cube_spline_interpolate_elipse(5)
+
 
