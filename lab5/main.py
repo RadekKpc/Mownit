@@ -1,4 +1,4 @@
-from mpmath import cos,cosh,sec,sin,sinh,exp,tan,fabs,mpf,log,mp
+from mpmath import cos,cosh,sec,sin,sinh,exp,tan,fabs,mpf,log,mp,pi
 
 f1 = lambda x : cos(x)*cosh(x) - 1
 f2 = lambda x : 1/x  - tan(x)
@@ -32,49 +32,51 @@ def bisection(min_precision,left,right,absolute_error,f):
     print("Miejsce zerowe",x)
     print("Wartosc funkcji",f(x))
     print("Liczba krokow",k)
+    print()
 
 
 #  dla f1
-bisection(7,4,6,mpf(10**(-7)),f1)
-bisection(7,6,8,mpf(10**(-7)),f1)
+
+left_f1 = mpf(3/2*pi)
+right_f1 = mpf(2*pi)
+
+left_f2 = mpf(0)
+right_f2 = mpf(pi/2)
+
+left_f3 = mpf(1)
+right_f3 = mpf(3)
+
+# dla f1
+bisection(7,left_f1,right_f1,mpf(10**(-7)),f1)
 
 #  dla f2
-bisection(7,0.1,2,mpf(10**(-7)),f2)
-bisection(7,2,4,mpf(10**(-7)),f2)
+bisection(7,left_f2 +mpf(10**(-7)),right_f2,mpf(10**(-7)),f2)
 
 #  dla f3
-bisection(7,-10,0,mpf(10**(-7)),f3)
-bisection(7,0,10,mpf(10**(-7)),f3)
+bisection(7,left_f3,right_f3,mpf(10**(-7)),f3)
 
 #  dla f1
-bisection(15,4,6,mpf(10**(-15)),f1)
-bisection(15,6,8,mpf(10**(-15)),f1)
+bisection(15,left_f1,right_f1,mpf(10**(-15)),f1)
 
 #  dla f2
-bisection(15,0.1,2,mpf(10**(-15)),f2)
-bisection(15,2,4,mpf(10**(-15)),f2)
+bisection(15,left_f2+mpf(10**(-15)),right_f2,mpf(10**(-15)),f2)
 
 #  dla f3
-bisection(15,-10,0,mpf(10**(-15)),f3)
-bisection(15,0,10,mpf(10**(-15)),f3)
+bisection(15,left_f3,right_f3,mpf(10**(-15)),f3)
 
 #  dla f1
-bisection(33,4,6,mpf(10**(-33)),f1)
-bisection(33,6,8,mpf(10**(-33)),f1)
+bisection(33,left_f1,right_f1,mpf(10**(-33)),f1)
 
 #  dla f2
-bisection(33,0.1,2,mpf(10**(-33)),f2)
-bisection(33,2,4,mpf(10**(-33)),f2)
+bisection(33,left_f2+mpf(10**(-7)),right_f2,mpf(10**(-33)),f2)
 
 #  dla f3
-bisection(33,-10,0,mpf(10**(-33)),f3)
-bisection(33,0,10,mpf(10**(-33)),f3)
+bisection(33,left_f3,right_f3,mpf(10**(-33)),f3)
 
-# k = 5
-
-# for i in range(k):
-#     print("Mijesce zerowe",i+1)
-#     bisection(10,(i+1)*pi + 0.1,(i+2)*pi - 0.1,mpf(10**(-7)),f1)
+k = 10
+for i in range(k):
+    print("Mijesce zerowe",i+1)
+    bisection(10,(i+1)*pi ,(i+2)*pi,mpf(10**(-7)),f1)
 
 
 # metoda newtona
@@ -104,40 +106,31 @@ df2 = lambda x : -1/(x**2) - sec(x)**2
 df3 = lambda x : exp(x) - 2**(-x)*log(2) - 2*sin(x)
 
 #  dla f1
-newton_method(7,4,6,mpf(10**(-7)),f1,df1,200)
-newton_method(7,6,8,mpf(10**(-7)),f1,df1,200)
+newton_method(7,left_f1,right_f1,mpf(10**(-7)),f1,df1,200)
 
 #  dla f2
-newton_method(7,0.1,2,mpf(10**(-7)),f2,df2,200)
-newton_method(7,2,4,mpf(10**(-7)),f2,df2,200)
+newton_method(7,left_f2 + mpf(10**(-7)),right_f2,mpf(10**(-7)),f2,df2,200)
 
 #  dla f3
-newton_method(7,-10,0,mpf(10**(-7)),f3,df3,200)
-newton_method(7,0,10,mpf(10**(-7)),f3,df3,200)
+newton_method(7,left_f3,right_f3,mpf(10**(-7)),f3,df3,200)
 
 #  dla f1
-newton_method(15,4,6,mpf(10**(-15)),f1,df1,200)
-newton_method(15,6,8,mpf(10**(-15)),f1,df1,200)
+newton_method(15,left_f1,right_f1,mpf(10**(-15)),f1,df1,200)
 
 #  dla f2
-newton_method(15,0.1,2,mpf(10**(-15)),f2,df2,200)
-newton_method(15,2,4,mpf(10**(-15)),f2,df2,200)
+newton_method(15,left_f2+mpf(10**(-15)),right_f2,mpf(10**(-15)),f2,df2,200)
 
 #  dla f3
-newton_method(15,-10,0,mpf(10**(-15)),f3,df3,200)
-newton_method(15,0,10,mpf(10**(-15)),f3,df3,200)
+newton_method(15,left_f3,right_f3,mpf(10**(-15)),f3,df3,200)
 
 #  dla f1
-newton_method(33,4,6,mpf(10**(-33)),f1,df1,200)
-newton_method(33,6,8,mpf(10**(-33)),f1,df1,200)
+newton_method(33,left_f1,right_f1,mpf(10**(-33)),f1,df1,200)
 
 #  dla f2
-newton_method(33,0.1,2,mpf(10**(-33)),f2,df2,200)
-newton_method(33,2,4,mpf(10**(-33)),f2,df2,200)
+newton_method(33,left_f2+mpf(10**(-33)),right_f2,mpf(10**(-33)),f2,df2,200)
 
 #  dla f3
-newton_method(33,-10,0,mpf(10**(-33)),f3,df3,200)
-newton_method(33,0,10,mpf(10**(-33)),f3,df3,200)
+newton_method(33,left_f3,right_f3,mpf(10**(-33)),f3,df3,200)
 
 def euler_method(min_precision,left,right,epsilon,f,max_iterations,k):
     mp.dps = min_precision
@@ -156,43 +149,34 @@ def euler_method(min_precision,left,right,epsilon,f,max_iterations,k):
     print("Miejsce zerowe",x0)
     print("Wartosc funkcji",f(x0))
     print("Liczba krokow",k)
-
+    print()
     # start_point = left
     # x = right
 
 #  dla f1
 print("Metoda siecznych")
-newton_method(7,4,6,mpf(10**(-7)),f1,df1,200)
-newton_method(7,6,8,mpf(10**(-7)),f1,df1,200)
+newton_method(7,left_f1,right_f1,mpf(10**(-7)),f1,df1,200)
 
 #  dla f2
-newton_method(7,0.1,2,mpf(10**(-7)),f2,df2,200)
-newton_method(7,2,4,mpf(10**(-7)),f2,df2,200)
+newton_method(7,left_f2 + mpf(10**(-7)),right_f2,mpf(10**(-7)),f2,df2,200)
 
 #  dla f3
-newton_method(7,-10,0,mpf(10**(-7)),f3,df3,200)
-newton_method(7,0,10,mpf(10**(-7)),f3,df3,200)
+newton_method(7,left_f3,right_f3,mpf(10**(-7)),f3,df3,200)
 
 #  dla f1
-newton_method(15,4,6,mpf(10**(-15)),f1,df1,200)
-newton_method(15,6,8,mpf(10**(-15)),f1,df1,200)
+newton_method(15,left_f1,right_f1,mpf(10**(-15)),f1,df1,200)
 
 #  dla f2
-newton_method(15,0.1,2,mpf(10**(-15)),f2,df2,200)
-newton_method(15,2,4,mpf(10**(-15)),f2,df2,200)
+newton_method(15,left_f2 + mpf(10**(-15)),right_f2,mpf(10**(-15)),f2,df2,200)
 
 #  dla f3
-newton_method(15,-10,0,mpf(10**(-15)),f3,df3,200)
-newton_method(15,0,10,mpf(10**(-15)),f3,df3,200)
+newton_method(15,left_f3,right_f3,mpf(10**(-15)),f3,df3,200)
 
 #  dla f1
-newton_method(33,4,6,mpf(10**(-33)),f1,df1,200)
-newton_method(33,6,8,mpf(10**(-33)),f1,df1,200)
+newton_method(33,left_f1,right_f1,mpf(10**(-33)),f1,df1,200)
 
 #  dla f2
-newton_method(33,0.1,2,mpf(10**(-33)),f2,df2,200)
-newton_method(33,2,4,mpf(10**(-33)),f2,df2,200)
+newton_method(33,left_f2 + mpf(10**(-33)),right_f2,mpf(10**(-33)),f2,df2,200)
 
 #  dla f3
-newton_method(33,-10,0,mpf(10**(-33)),f3,df3,200)
-newton_method(33,0,10,mpf(10**(-33)),f3,df3,200)
+newton_method(33,left_f3,right_f3,mpf(10**(-33)),f3,df3,200)
