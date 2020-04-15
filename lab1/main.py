@@ -1,3 +1,4 @@
+# Radosław Kopeć Informatyka 2020 MOWNIT
 import numpy as np
 from numpy import float32,power,float64
 import matplotlib.pyplot as pyplot
