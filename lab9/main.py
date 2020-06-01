@@ -46,7 +46,7 @@ def are_equals(A,B, delta):
 
 
 for i in range(5):
-    A = np.random.rand(i+1,i+1)
+    A = np.random.rand(i+1)
     print(A)
     Q,R = gram_schmid_qr(A,i+1)
     q,r = qr(A)
