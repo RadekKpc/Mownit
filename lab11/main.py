@@ -12,7 +12,6 @@ N = [10,1000,5000]
 
 
 # https://matplotlib.org/3.1.1/gallery/statistics/hist.html
-# https://www.geeksforgeeks.org/python-program-to-convert-floating-to-binary/
 # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
 
 def binary(num):
@@ -82,11 +81,8 @@ def test_generators(N):
     frequency(pcg64_bit_string)
     frequency(twister_bit_string)
 
-# test testu
-print(frequency("1100100100001111110110101010001000100001011010001100001000110100110001001100011001100010100010111000"))
-
-# for n in N:
-#     test_generators(n)
+for n in N:
+    test_generators(n)
 
 
 # Generowanie liczb z rokladu normalnego
@@ -101,7 +97,8 @@ for i in range(-10000,10000):
 plt.plot(NX,NY,'bo',markersize=1)
 plt.show()
 
-for n in N:
+# http://th.if.uj.edu.pl/~bwrobel/prezentacja_01.pdf
+def gen_norm(n,u,e):
     X = []
     Y = []
     for i in range(n):
@@ -117,8 +114,8 @@ for n in N:
             if R  < 1:
                 break
 
-        X.append(math.sqrt((-2)*math.log(X1))*(V1/R))
-        Y.append(math.sqrt((-2)*math.log(X1))*(V2/R))
+        X.append(u + e*math.sqrt((-2)*math.log(X1))*(V1/R))
+        Y.append(u + e*math.sqrt((-2)*math.log(X1))*(V2/R))
 
     _ , axs = plt.subplots(1, 2, sharey=True, tight_layout=True)
     axs[0].hist(X, bins=10, color  = 'b', label = "twister")
@@ -136,7 +133,8 @@ for n in N:
     WY = stats.shapiro(Y)
     print(WY)
 
-
+for n in N:
+    gen_norm(n,0,1)
 # Wyznaczanie PI metoda monte carlo
 
 def monte_carlo(n,visualize = True):
