@@ -1,11 +1,14 @@
 import numpy as np
 from random import random
 import scipy
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 from scipy.special import erfc
 import math
 import struct
-N = [10,1000,5000,10000]
+
+
+N = [10,1000,5000]
 
 
 # https://matplotlib.org/3.1.1/gallery/statistics/hist.html
@@ -87,21 +90,100 @@ print(frequency("110010010000111111011010101000100010000101101000110000100011010
 
 
 # Generowanie liczb z rokladu normalnego
+#  rozklad normalny:
+
+NX = []
+NY = []
+for i in range(-10000,10000):
+    NX.append(4*i/10000)
+    NY.append((1/math.sqrt(2*math.pi))*math.exp(-math.pow(4*i/10000,2)/2))
+
+plt.plot(NX,NY,'bo',markersize=1)
+plt.show()
 
 for n in N:
     X = []
     Y = []
     for i in range(n):
 
-        X1 = random()
-        X2 = random()
+        while True:
+            X1 = random()
+            X2 = random()
 
-        X.append(math.sqrt((-2)*math.log(X1))*math.cos(2*math.pi*X2))
-        Y.append(math.sqrt((-2)*math.log(X1))*math.sin(2*math.pi*X2))
+            V1 = (float) (2*X1 - 1)
+            V2 = (float) (2*X2 - 1)
+
+            R = math.sqrt(math.fabs(V1*V1 - V2*V2))
+            if R  < 1:
+                break
+
+        X.append(math.sqrt((-2)*math.log(X1))*(V1/R))
+        Y.append(math.sqrt((-2)*math.log(X1))*(V2/R))
 
     _ , axs = plt.subplots(1, 2, sharey=True, tight_layout=True)
-    axs[0].hist(X, bins=100, color  = 'b', label = "twister")
+    axs[0].hist(X, bins=10, color  = 'b', label = "twister")
+    axs[0].plot(NX,np.array(NY)*n,'ro',markersize=1)
+    # axs[0].plot(X,Y,'bo',markersize=1)
     axs[0].legend()
-    axs[1].hist(Y, bins=100, color  = 'r', label = "pcg64")
+    axs[1].hist(Y, bins=10, color  = 'r', label = "pcg64")
+    axs[1].plot(NX,np.array(NY)*n,'bo',markersize=1)
     axs[1].legend()
     plt.show()
+
+    # testy shapiro-wilka
+    WX = stats.shapiro(X)
+    print(WX)
+    WY = stats.shapiro(Y)
+    print(WY)
+
+
+# Wyznaczanie PI metoda monte carlo
+
+def monte_carlo(n,visualize = True):
+
+    in_circle_x = []
+    in_circle_y = []
+
+    out_circle_x = []
+    out_circle_y = []
+
+    for i in range(n):
+        x = np.random.uniform(-1,1)
+        y = np.random.uniform(-1,1)
+
+        if x*x + y*y <= 1:
+            in_circle_x.append(x)
+            in_circle_y.append(y)
+        else:
+            out_circle_x.append(x)
+            out_circle_y.append(y)
+
+    if visualize:
+        plt.plot(in_circle_x,in_circle_y,'ro',markersize=1)
+        plt.plot(out_circle_x,out_circle_y,'bo',markersize=1)
+        plt.show()
+
+    return (4*len(in_circle_x)/n)
+
+print(monte_carlo(10))
+print(monte_carlo(100))
+print(monte_carlo(1000))
+print(monte_carlo(10000))
+print(monte_carlo(100000))
+print(monte_carlo(1000000))
+
+
+# blad bezwzgledny a n
+
+X = []
+Y = []
+for i in range(100,10000,10):
+    Y.append(math.fabs(monte_carlo(i,visualize=False)-math.pi))
+    X.append(i)
+
+plt.plot(X,Y,'bo',markersize=1)
+
+plt.show()
+
+
+
