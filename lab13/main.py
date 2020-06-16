@@ -1,6 +1,7 @@
 # http://iswiki.if.uj.edu.pl/images/2/20/AiSD_22._Symulowane_wy%C5%BCarzanie_%28problem_komiwoja%C5%BCera%29.pdf
 
 
+
 import random
 import math
 import numpy as np
@@ -32,12 +33,11 @@ def dual_annealing2(f, swap ,N, maxiter=10000, callback = lambda x: None, initia
             if pr <= Pr(delta_length):
                 Y = [x for x in X]
                 length = opt
-        
+
         initial_temp = cold_speed*initial_temp
-    
+
     return B,b_length
 
-    
 def uniform_points(N,x_min,x_max,y_min,y_max):
     X = []
     Y = []
@@ -66,7 +66,7 @@ def four_gropus(N,d,x_length,y_length):
         if i%4 == 3:
             X.append(random.uniform(0,x_length))
             Y.append(random.uniform(y_length+d,2*y_length + d))
-    
+
     return X,Y
 
 
@@ -93,14 +93,14 @@ def salesman_lib(X,Y,N, temp = 5230):
         x2_copy = [f for f in x]
         for i in range(N):
             P.append(i)
-        
+
         x2_ziped = list(zip(P,x2_copy))
         x2_ziped.sort(key=lambda tup: tup[1])
         x2_unziped = list(zip(*x2_ziped))
         x2_copy = x2_unziped[1]
         P = x2_unziped[0]
         return P
-        
+
     def length(x):
         P = permutation(x)
         leng = 0
@@ -126,7 +126,7 @@ def salesman_lib(X,Y,N, temp = 5230):
     return adapt_points_to_permutation(permutation(ret.x))
 
 def salesman(X,Y,N,cons_swap = True, arb_swap = False, temp = 5230):
-        
+
     def consecutive_swap(x):
         # if cons_swap:
         pair_to_swap = random.randint(0,N-2)
@@ -163,13 +163,14 @@ def salesman(X,Y,N,cons_swap = True, arb_swap = False, temp = 5230):
         ret,leng = dual_annealing2(salesman_func, arbitrary_swap, N,initial_temp=temp)
     if cons_swap:
         ret,leng = dual_annealing2(salesman_func, consecutive_swap, N,initial_temp=temp)
-        
+
     print(f"Optymalna permutacja: ",ret," \nDługośc ścieżki :", leng)
     return adapt_points_to_permutation(ret)
 
 
 N = 10
 for i in range(6):
+    print("Liczba punktów:",N)
     print("Wylosowane punkty:")
     X,Y = uniform_points(N,10,0,10,0)
     visualize_points(X,Y)
@@ -190,6 +191,7 @@ for i in range(6):
 
 N = 10
 for i in range(6):
+    print("Liczba punktów:",N)
     print("Wylosowane punkty:")
     X,Y = normal_points(N,0,1)
     visualize_points(X,Y)
@@ -203,14 +205,14 @@ for i in range(6):
     X2,Y2 = salesman(X,Y,N,arb_swap=True,cons_swap=False)
     visualize_points(X2,Y2)
 
-    print("Consecutive wap:")
+    print("Consecutive swap:")
     X2,Y2 = salesman(X,Y,N,arb_swap=False,cons_swap=True)
     visualize_points(X2,Y2)
     N += 5
+
 N = 10
-
 for i in range(6):
-
+    print("Liczba punktów:",N)
     print("Wylosowane punkty:")
     X,Y = four_gropus(N,30,10,10)
     visualize_points(X,Y)
@@ -248,14 +250,14 @@ def salesman_visualize(X,Y,N,no_swap = True,cons_swap = False, arb_swap = False,
         x2_copy = [f for f in x]
         for i in range(N):
             P.append(i)
-        
+
         x2_ziped = list(zip(P,x2_copy))
         x2_ziped.sort(key=lambda tup: tup[1])
         x2_unziped = list(zip(*x2_ziped))
         x2_copy = x2_unziped[1]
         P = x2_unziped[0]
         return P
-        
+
     def consecutive_swap(x):
         if cons_swap:
             pair_to_swap = random.randint(0,N-2)
@@ -274,7 +276,7 @@ def salesman_visualize(X,Y,N,no_swap = True,cons_swap = False, arb_swap = False,
 
         consecutive_swap(x)
         arbitrary_swap(x)
-       
+
         P = permutation(x)
         leng = 0
         for i in range(N-1):
